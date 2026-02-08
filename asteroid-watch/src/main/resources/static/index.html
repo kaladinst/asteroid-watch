@@ -25,18 +25,15 @@
                 .then(data => {
                     const container = document.getElementById('asteroid-list');
 
-                    // If data is empty, keep showing "Loading..." or say "No data yet"
                     if (data.length === 0) {
                         container.innerHTML = '<p>Waiting for Scheduler... (Refresh in 10 seconds)</p>';
                         return;
                     }
 
-                    container.innerHTML = ''; // Clear loading text
+                    container.innerHTML = '';
 
                     data.forEach(asteroid => {
-                        // FIX: Use 'hazardous' to match your JSON output
                         const isHazardous = asteroid.hazardous;
-
                         const div = document.createElement('div');
                         div.className = `card ${isHazardous ? 'danger' : 'safe'}`;
 
