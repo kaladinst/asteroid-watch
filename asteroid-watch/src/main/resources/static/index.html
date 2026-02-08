@@ -2,9 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>NASA Asteroid Watch</title>
+    <style>
+        body { font-family: sans-serif; background-color: #222; color: #fff; padding: 20px; }
+        h1 { color: #f39c12; }
+        .card { background: #333; margin: 10px 0; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .danger { border-left: 5px solid red; }
+        .safe { border-left: 5px solid green; }
+        .tag { padding: 5px 10px; border-radius: 4px; font-weight: bold; }
+        .tag-danger { background: red; color: white; }
+        .tag-safe { background: green; color: white; }
+    </style>
 </head>
 <body>
+        <h1>🌑 NASA Asteroid Watch</h1>
+        <p>Live data from Spring Boot Backend</p>
+        <div id="asteroid-list">Loading...</div>
 
+        <script>
+            fetch('http://localhost:8080/asteroids')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('asteroid-list');
+
+                    // If data is empty, keep showing "Loading..." or say "No data yet"
+                    if (data.length === 0) {
+                        container.innerHTML = '<p>Waiting for Scheduler... (Refresh in 10 seconds)</p>';
+                        return;
+                    }
+
+                    container.innerHTML = ''; // Clear loading text
+
+                    data.forEach(asteroid => {
+                        // FIX: Use 'hazardous' to match your JSON output
+                        const isHazardous = asteroid.hazardous;
+
+                        const div = document.createElement('div');
+                        div.className = `card ${isHazardous ? 'danger' : 'safe'}`;
+
+                        div.innerHTML = `
+                        <div>
+                            <h3>${asteroid.name}</h3>
+                            <p>Date: ${asteroid.closeApproachDate}</p>
+                        </div>
+                        <span class="tag ${isHazardous ? 'tag-danger' : 'tag-safe'}">
+                            ${isHazardous ? '⚠️ HAZARDOUS' : '✅ SAFE'}
+                        </span>
+                    `;
+                        container.appendChild(div);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('asteroid-list').innerHTML = '<p style="color:red">Error loading data. Check console.</p>';
+                });
+        </script>
 </body>
 </html>
