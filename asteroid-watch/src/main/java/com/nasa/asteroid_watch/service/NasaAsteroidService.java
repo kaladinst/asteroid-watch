@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -39,27 +40,23 @@ public class NasaAsteroidService {
             try {
                 NasaResponse response = restTemplate.getForObject(url, NasaResponse.class);
                 if (response != null && response.getNearEarthObjects() != null) {
-                    log.info("NASA returned dates: {}"  , response.getNearEarthObjects().keySet());
-                    List<Asteroid> todaysAsteroids = response.getNearEarthObjects().get(today);
+                    for(Map.Entry<String, List<Asteroid>> entry : response.getNearEarthObjects().entrySet()) {
+                        String date = entry.getKey();
+                        List<Asteroid> asteroidList = entry.getValue();
 
-                    if (todaysAsteroids != null) {
-                        for (Asteroid asteroid : todaysAsteroids) {
-                            asteroid.setCloseApproachDate(String.valueOf(today));
+                        log.info("Found {} asteroids for date: {}" , asteroidList.size() , date);
+
+                        for(Asteroid asteroid : asteroidList) {
+                            asteroid.setCloseApproachDate(date);
+
                             asteroidRepository.save(asteroid);
-                            log.info("   💾 Saved: {} (Hazardous: {})", asteroid.getName(), asteroid.isHazardous());
+
+                            log.info("Saving Asteroid: {}" , asteroid.getName());
                         }
-                    } else {
-                        log.warn("Could not find asteroids for date: {}" , today);
                     }
+
+                    log.info("Successfully saved all asteroids from NASA");
                 }
-                /* for(Map.Entry<String, List<Asteroid>> entry : response.getNearEarthObjects().entrySet()) {
-                    String date = entry.getKey();
-                    List<Asteroid> asteroidList = entry.getValue();
-
-                    System.out.println("Checking asteroids for date: " + date);
-
-
-                } */
             } catch (Exception e) {
                 log.error("Failed to fetch data from NASA: " +e.getMessage() );
             }
