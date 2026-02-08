@@ -1,0 +1,15 @@
+package com.nasa.asteroid_watch.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
+import java.util.List;
+import java.util.Map;
+
+@Data
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class NasaResponse {
+    @JsonProperty("near_earth_objects")
+    private Map<String, List<Asteroid>> nearEarthObjects;
+}
