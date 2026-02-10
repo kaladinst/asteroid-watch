@@ -2,7 +2,8 @@
 
 > A Spring Boot application that monitors Near-Earth Objects (NEOs) in real-time using NASA's NeoWs API.
 
-![Dashboard Screenshot](PLACE_YOUR_IMAGE_LINK_HERE)
+
+![WhatsApp Image 2026-02-10 at 13 31 41](https://github.com/user-attachments/assets/be0b4c0c-cc24-49d0-b796-afdd17fdbdb7)
 
 ## 🚀 Overview
 This system acts as an automated "Sentry" for Earth. It connects to NASA's servers daily, analyzes passing asteroids, and filters them to identify potentially hazardous objects.
