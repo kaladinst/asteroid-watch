@@ -33,7 +33,7 @@ It is built as a **full-stack application** with a Java backend handling the com
     * Get a free key from [api.nasa.gov](https://api.nasa.gov/).
     * Open `src/main/resources/application.properties` and add:
         ```properties
-        nasa.api.key=YOUR_ACTUAL_KEY
+        nasa.api.key=YOUR_API_KEY
         ```
 3.  **Build & Run**
     ```bash
